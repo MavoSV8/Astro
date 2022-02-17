@@ -16,4 +16,27 @@
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- Day Fragment -->
+    <string name="sunriseLabel">Sunrise:</string>
+    <string name="sunsetLabel">Sunset:</string>
+    <string name="dawnLabel">Civil Dawn:</string>
+    <string name="duskLabel">Civil Dusk:</string>
+    <string name="time">Time:</string>
+    <string name="azimuth">Azimuth:</string>
+
+    <!-- Night Fragment -->
+    <string name="moonriseLabel">Moonrise:</string>
+    <string name="moonsetLabel">Moonset:</string>
+    <string name="newMoon">New Moon:</string>
+    <string name="fullmoon">Full Moon:</string>
+    <string name="moonPhase">Moon phase:</string>
+    <string name="dayOfLunarMonth">Day of lunar month:</string>
+
+    <!-- common strings -->
+    <string name="phoneTime">Phone Time:</string>
+    <string name="longitude">Longitude:</string>
+    <string name="latitude">Latitude:</string>
+
+
+
 </resources>
