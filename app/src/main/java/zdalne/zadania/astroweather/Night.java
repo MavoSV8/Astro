@@ -9,12 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.astrocalculator.AstroCalculator;
 import com.astrocalculator.AstroCalculator.*;
 import com.astrocalculator.AstroDateTime;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -44,6 +46,7 @@ public class Night extends Fragment {
     private String longitude;
     private String latitude;
     private int refresh;
+    private String synodicDay;
 
     public Night() {
         // Required empty public constructor
@@ -62,8 +65,9 @@ public class Night extends Fragment {
 
     private void setupMoonUpdater(){
         moonUpdater = new Thread(() -> {
-            while(!exit){
-                setMoon();
+            while(!moonUpdater.isInterrupted()){
+                getActivity().runOnUiThread(this::setMoon);
+
                 try {
                     Thread.sleep(refresh);
                 } catch (InterruptedException e) {
@@ -77,14 +81,15 @@ public class Night extends Fragment {
     private void setupPhoneTimeUpdater(){
         phoneTimeUpdater = new Thread(() -> {
             while(true){
-                setPhoneTime();
+                getActivity().runOnUiThread(this::setPhoneTime);
+
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
-                    exit = true;
                     e.printStackTrace();
                 }
             }
+
         });
     }
 
@@ -106,6 +111,14 @@ public class Night extends Fragment {
             latitude = getArguments().getString(ARG_PARAM2);
             refresh = getArguments().getInt(ARG_PARAM3);
         }
+
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        rootView = inflater.inflate(R.layout.fragment_night, container, false);
         moonsetTime = rootView.findViewById(R.id.moonsetTime);
         moonriseTime = rootView.findViewById(R.id.moonriseTime);
         newMoonDate = rootView.findViewById(R.id.newMoonDate);
@@ -116,12 +129,6 @@ public class Night extends Fragment {
         longitudeNight = rootView.findViewById(R.id.longitudeNight);
         latitudeNight = rootView.findViewById(R.id.latitudeNight);
 
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_night, container, false);
         return rootView;
     }
 
@@ -131,29 +138,75 @@ public class Night extends Fragment {
         astroLocation = new Location(Double.parseDouble(longitude),Double.parseDouble(latitude));
         AstroCalculator astroCalculator = new AstroCalculator(astroDateTime,astroLocation);
         moonInfo = astroCalculator.getMoonInfo();
+        synodicDay = String.valueOf(Math.abs(localDateTime.until(LocalDateTime.of(moonInfo.getNextNewMoon().getYear(),moonInfo.getNextNewMoon().getMonth(),moonInfo.getNextNewMoon().getDay(),moonInfo.getNextNewMoon().getHour(),moonInfo.getNextNewMoon().getMinute()), ChronoUnit.DAYS)));
+
     }
 
     @SuppressLint("SetTextI18n")
     public void setPhoneTime(){
         localDateTime = LocalDateTime.now();
-        currentTimeNight.setText(localDateTime.getHour() + " " + localDateTime.getMinute());
+        if(localDateTime.getHour() < 10 && localDateTime.getMinute()<10){
+            currentTimeNight.setText("0" + localDateTime.getHour() + ":0" + localDateTime.getMinute());
+        }
+        else if(localDateTime.getHour() >= 10 && localDateTime.getMinute() < 10){
+            currentTimeNight.setText(localDateTime.getHour() + ":0" + localDateTime.getMinute());
+        }
+        else if(localDateTime.getHour() < 10 && localDateTime.getMinute() >= 10){
+            currentTimeNight.setText("0" + localDateTime.getHour() + ":" + localDateTime.getMinute());
+        }
+        else{
+            currentTimeNight.setText(localDateTime.getHour() + ":" + localDateTime.getMinute());
+        }
+
     }
 
     @SuppressLint("SetTextI18n")
     public void setMoon(){
         setMoonInfo();
-        moonsetTime.setText(moonInfo.getMoonset().getHour() + ":" + moonInfo.getMoonset().getMinute());
-        moonriseTime.setText(moonInfo.getMoonrise().getHour() + ":" + moonInfo.getMoonrise().getMinute());
+        if(moonInfo.getMoonset().getHour() < 10 && moonInfo.getMoonset().getMinute()<10){
+            moonsetTime.setText("0" + moonInfo.getMoonset().getHour() + ":0" + moonInfo.getMoonset().getMinute());
+        }
+        else if(moonInfo.getMoonset().getHour() >= 10 && moonInfo.getMoonset().getMinute() < 10){
+            moonsetTime.setText(moonInfo.getMoonset().getHour() + ":0" + moonInfo.getMoonset().getMinute());
+        }
+        else if(moonInfo.getMoonset().getHour() < 10 && moonInfo.getMoonset().getMinute() >= 10){
+            moonsetTime.setText("0" + moonInfo.getMoonset().getHour() + ":" + moonInfo.getMoonset().getMinute());
+        }
+        else{
+            moonsetTime.setText(moonInfo.getMoonset().getHour() + ":" + moonInfo.getMoonset().getMinute());
+        }
+
+        if(moonInfo.getMoonrise().getHour() < 10 && moonInfo.getMoonrise().getMinute() < 10){
+            moonriseTime.setText("0" + moonInfo.getMoonrise().getHour() + ":0" + moonInfo.getMoonrise().getMinute());
+        }
+        else if(moonInfo.getMoonrise().getHour() >= 10 && moonInfo.getMoonrise().getMinute() < 10){
+            moonriseTime.setText(moonInfo.getMoonrise().getHour() + ":0" + moonInfo.getMoonrise().getMinute());
+        }
+        else if(moonInfo.getMoonrise().getHour() < 10 && moonInfo.getMoonrise().getMinute() >= 10){
+            moonriseTime.setText("0" + moonInfo.getMoonrise().getHour() + ":" + moonInfo.getMoonrise().getMinute());
+        }
+        else{
+            moonriseTime.setText(moonInfo.getMoonrise().getHour() + ":" + moonInfo.getMoonrise().getMinute());
+        }
+
+
+
         newMoonDate.setText(moonInfo.getNextNewMoon().toString());
         fullMoonDate.setText(moonInfo.getNextFullMoon().toString());
-        moonPhase.setText((int) moonInfo.getIllumination() + "%");
-        dayOfLunarMonth.setText((int) moonInfo.getAge());
+        moonPhase.setText((moonInfo.getIllumination()*100) + "%");
+        dayOfLunarMonth.setText(synodicDay);
+        latitudeNight.setText(latitude);
+        longitudeNight.setText(longitude);
+        Toast.makeText(getActivity(),"Moon Data updated!", Toast.LENGTH_SHORT).show();
 
     }
 
-    public void forceUpdate(int refresh){
+    public void forceUpdate(int refresh, String lon, String lat){
         moonUpdater.interrupt();
         this.refresh = refresh;
+        this.longitude = lon;
+        this.latitude = lat;
+        setupMoonUpdater();
         exit = false;
         moonUpdater.start();
 

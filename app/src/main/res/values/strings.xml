@@ -32,11 +32,16 @@
     <string name="moonPhase">Moon phase:</string>
     <string name="dayOfLunarMonth">Day of lunar month:</string>
 
+    <!-- Settings Fragment -->
+
+    <string name="saveChanges">Save</string>
+    <string name="refresh">Refresh:</string>
+
+
     <!-- common strings -->
     <string name="phoneTime">Phone Time:</string>
     <string name="longitude">Longitude:</string>
     <string name="latitude">Latitude:</string>
-
 
 
 </resources>
