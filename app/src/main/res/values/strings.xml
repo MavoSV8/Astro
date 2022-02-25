@@ -36,12 +36,38 @@
 
     <string name="saveChanges">Save</string>
     <string name="refresh">Refresh:</string>
+    <string name="cities">Cities</string>
+    <string name="citiesInput">Enter city:</string>
+    <string name="addCity">Add</string>
+    <string name="units">Units:</string>
+    <string name="refreshBtn">Refresh weather data</string>
+    <string name="deleteCity">Delete</string>
 
 
     <!-- common strings -->
     <string name="phoneTime">Phone Time:</string>
     <string name="longitude">Longitude:</string>
     <string name="latitude">Latitude:</string>
+
+    <!-- Forecast strings -->
+    <string name="dayOne">First day:</string>
+    <string name="dayTwo">Second day:</string>
+    <string name="dayThree">Third day:</string>
+    <string name="dayFour">Fourth day:</string>
+    <string name="dayFive">Fifth day:</string>
+
+
+    <!-- Weather strings -->
+    <string name="city">City:</string>
+    <string name="coordinates">Coordinates:</string>
+    <string name="pressure">Atmospheric pressure:</string>
+    <string name="weather">Weather:</string>
+    <string name="wind">Wind:</string>
+    <string name="windStrength">Strength:</string>
+    <string name="windDirection">Direction:</string>
+    <string name="humidity">Humidity:</string>
+    <string name="visibility">Visibility:</string>
+    <string name="temp">Temperature:</string>
 
 
 </resources>

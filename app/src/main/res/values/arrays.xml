@@ -16,6 +16,10 @@
         <item>10m</item>
         <item>30m</item>
     </string-array>
-
+    <string-array name="units">
+        <item>standard</item>
+        <item>metric</item>
+        <item>imperial</item>
+    </string-array>
 
 </resources>
